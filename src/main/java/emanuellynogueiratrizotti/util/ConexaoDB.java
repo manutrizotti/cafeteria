@@ -8,7 +8,7 @@ public class ConexaoDB {
     
     // Credenciais de conexão
     private static final String URL = "jdbc:postgresql://localhost:5432/cafeteria_db";
-    private static final String USER = "java_user";
+    private static final String USER = "postgres";
     private static final String PASSWORD = "123456";
 
     public static Connection conectar() {

@@ -138,6 +138,36 @@ public class ComandaDAO {
         }
         return lista;
     }
+    
+    // NOVO MÉTODO: Listar junção de Comandas e Funcionários (Garçons)
+    public List<String> listarComandasEGarcons() {
+        // Junção entre a tabela comandas e a tabela funcionarios
+        String sql = "SELECT c.id_comanda, c.status, f.nome AS nome_garcom " +
+                     "FROM comandas c " +
+                     "JOIN funcionarios f ON c.id_funcionario_garcom = f.id_funcionario " +
+                     "ORDER BY c.id_comanda DESC";
+        
+        List<String> listaResultados = new ArrayList<>();
+        
+        try (Connection conn = ConexaoDB.conectar(); 
+             Statement stmt = conn.createStatement(); 
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                int idComanda = rs.getInt("id_comanda");
+                String status = rs.getString("status");
+                String nomeGarcom = rs.getString("nome_garcom");
+                
+                // Formata o resultado mesclado para a lista
+                String linha = "Comanda: " + idComanda + " | Status: " + status + " | Garçom: " + nomeGarcom;
+                listaResultados.add(linha);
+            }
+        } catch (SQLException e) { 
+            throw new RuntimeException("Erro ao listar com junção: " + e.getMessage()); 
+        }
+        
+        return listaResultados;
+    }
 
     // MÉTODO AUXILIAR QUE FALTAVA (O "MAQUINA DE MAPEAMENTO")
     private Comanda mapearComanda(ResultSet rs) throws SQLException {
